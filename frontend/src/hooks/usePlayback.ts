@@ -17,17 +17,17 @@ export function usePlayback(
   const [displayedIncidents, setDisplayedIncidents] = useState<NormalizedIncident[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<number | null>(null);
 
   const start = useCallback(() => {
     if (isPlaying || currentIndex >= allIncidents.length || allIncidents.length === 0) return;
     
     setIsPlaying(true);
-    intervalRef.current = setInterval(() => {
+    intervalRef.current = window.setInterval(() => {
       setCurrentIndex(prev => {
         if (prev >= allIncidents.length) {
           setIsPlaying(false);
-          if (intervalRef.current) {
+          if (intervalRef.current !== null) {
             clearInterval(intervalRef.current);
             intervalRef.current = null;
           }

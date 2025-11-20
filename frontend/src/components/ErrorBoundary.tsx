@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ErrorInfo, ReactNode } from "react";
 
 interface Props {
   children: ReactNode;
@@ -12,7 +12,7 @@ interface State {
 export class ErrorBoundary extends Component<Props, State> {
   public state: State = {
     hasError: false,
-    error: null
+    error: null,
   };
 
   public static getDerivedStateFromError(error: Error): State {
@@ -20,7 +20,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Uncaught error:', error, errorInfo);
+    console.error("Uncaught error:", error, errorInfo);
   }
 
   public render() {
@@ -29,9 +29,13 @@ export class ErrorBoundary extends Component<Props, State> {
         <div className="min-h-screen bg-gray-900 text-white p-4 flex items-center justify-center">
           <div className="bg-red-900 border border-red-700 text-red-100 px-6 py-4 rounded max-w-2xl">
             <h1 className="text-2xl font-bold mb-4">⚠️ Something went wrong</h1>
-            <p className="mb-4">{this.state.error?.message || 'An unexpected error occurred'}</p>
+            <p className="mb-4">
+              {this.state.error?.message || "An unexpected error occurred"}
+            </p>
             <details className="mb-4">
-              <summary className="cursor-pointer text-sm">Error details</summary>
+              <summary className="cursor-pointer text-sm">
+                Error details
+              </summary>
               <pre className="mt-2 text-xs overflow-auto bg-black p-2 rounded">
                 {this.state.error?.stack}
               </pre>
@@ -50,4 +54,3 @@ export class ErrorBoundary extends Component<Props, State> {
     return this.props.children;
   }
 }
-

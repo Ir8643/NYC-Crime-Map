@@ -1,44 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { Controls } from './components/Controls';
-import { Map } from './components/Map';
-import { Feed } from './components/Feed';
-import { Charts } from './components/Charts';
-import { usePlayback } from './hooks/usePlayback';
-import { fetchIncidents } from './services/api';
-import type { NormalizedIncident } from './types';
+import { useState, useEffect } from "react";
+import { Controls } from "./components/Controls";
+import { Map } from "./components/Map";
+import { Feed } from "./components/Feed";
+import { Charts } from "./components/Charts";
+import { usePlayback } from "./hooks/usePlayback";
+import { fetchIncidents } from "./services/api";
+import type { NormalizedIncident } from "./types";
 
 function App() {
   const [allIncidents, setAllIncidents] = useState<NormalizedIncident[]>([]);
-  const [status, setStatus] = useState('Loading data...');
+  const [status, setStatus] = useState("Loading data...");
   const [error, setError] = useState<string | null>(null);
 
-  const {
-    displayedIncidents,
-    currentIndex,
-    isPlaying,
-    start,
-    pause,
-    reset
-  } = usePlayback(allIncidents, 200);
+  const { displayedIncidents, currentIndex, isPlaying, start, pause, reset } =
+    usePlayback(allIncidents, 200);
 
   useEffect(() => {
     async function loadData() {
-      setStatus('Fetching data from APIs...');
+      setStatus("Fetching data from APIs...");
       setError(null);
-      
+
       try {
         const response = await fetchIncidents();
-        
+
         if (response.success && response.data.length > 0) {
           setAllIncidents(response.data);
-          setStatus(`Ready. ${response.data.length} incidents loaded. Click Play to start.`);
+          setStatus(
+            `Ready. ${response.data.length} incidents loaded. Click Play to start.`
+          );
         } else {
-          const errorMsg = response.message || response.error || 'Failed to load data';
+          const errorMsg =
+            response.message || response.error || "Failed to load data";
           setError(errorMsg);
           setStatus(`Error: ${errorMsg}`);
         }
       } catch (err) {
-        const errorMsg = err instanceof Error ? err.message : 'Unknown error occurred';
+        const errorMsg =
+          err instanceof Error ? err.message : "Unknown error occurred";
         setError(errorMsg);
         setStatus(`Error: ${errorMsg}`);
       }
@@ -49,7 +47,7 @@ function App() {
 
   const handleReset = () => {
     reset();
-    setStatus('Reset. Click Play to start.');
+    setStatus("Reset. Click Play to start.");
   };
 
   return (
@@ -74,7 +72,10 @@ function App() {
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Check your internet connection</li>
                 <li>Verify the backend server is running on port 3001</li>
-                <li>Check if DNS resolution is working (try: ping data.cityofnewyork.us)</li>
+                <li>
+                  Check if DNS resolution is working (try: ping
+                  data.cityofnewyork.us)
+                </li>
                 <li>Check browser console and backend logs for more details</li>
               </ul>
             </div>
@@ -99,4 +100,3 @@ function App() {
 }
 
 export default App;
-
